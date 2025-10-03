@@ -1,8 +1,8 @@
 import React from 'react';
 import 
 {Roues, Route, Routes} from 'react-router-dom';
-import Home from './components/Home';
-import UserDetails from './components/UserDetails';
+import Home from './pages/Home';
+import UserDetails from './pages/UserDetails';
 
 function App() {
     return (
