@@ -1,47 +1,39 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 
-function UserList() {
-    const [users, setUsers] = useState([]);
-    const [search, setSearch] = useState('');
-
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
-        .then(data => setUsers(data));
-
-    }, []);
-
-    const filteredUsers =users.filter(user =>
-        user.name.toLowerCase().includes(search.toLocaleLowerCase()) ||
-        user.email.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-    );
-
-    const addUser = (newUser) => {
-        setUsers([...users, newUser])
-    };
-
+function UserList({ users, deleteUser }) {
   return (
     <div>
-      <h1>User Management</h1>
-      <AddUserForm addUser={addUser} />
-      <input
-        type="text"
-        placeholder="Search by name or email"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <div>
-        {filteredUsers.map(user => (
-          <div key={user.id} style={{border: '1px solid #ccc', margin: '10px', padding: '10px'}}>
-            <Link to={`/user/${user.id}`}>
-              <h3>{user.name}</h3>
-            </Link>
-            <p>{user.email}</p>
-            <p>{user.company.name}</p>
-          </div>
-        ))}
-      </div>
+      {users.length === 0 ? (
+        <p>No users found</p>
+      ) : (
+        <table border="1" cellPadding="10" style={{ borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Company</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u.id}>
+                <td>
+                  <Link to={`/user/${u.id}`}>{u.name}</Link>
+                </td>
+                <td>{u.email}</td>
+                <td>{u.company?.name}</td>
+                <td>
+                  <button onClick={() => deleteUser(u.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
+
 export default UserList;

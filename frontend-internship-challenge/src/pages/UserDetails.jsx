@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
-function UserDetails() {
+function UserDetails({ users }) {
   const { id } = useParams();
-  const [user, setUser] = useState(null);
+  const user = users.find((u) => u.id === parseInt(id));
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState(user || {});
 
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then(res => res.json())
-      .then(data => setUser(data));
-  }, [id]);
+  if (!user) return <p>User not found</p>;
 
-  if (!user) return <p>Loading...</p>;
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <div>
-      <Link to="/">Back to Users</Link>
-      <h2>{user.name}</h2>
-      <p>Email: {user.email}</p>
-      <p>Phone: {user.phone}</p>
-      <p>Website: {user.website}</p>
-      <p>Address: {user.address.street}, {user.address.city}</p>
+      <h2>User Details</h2>
+      {!editing ? (
+        <div>
+          <p><b>Name:</b> {user.name}</p>
+          <p><b>Email:</b> {user.email}</p>
+          <p><b>Phone:</b> {user.phone}</p>
+          <p><b>Website:</b> {user.website}</p>
+          <p><b>Address:</b> {user.address?.street}, {user.address?.city}</p>
+          <button onClick={() => setEditing(true)}>Edit</button>
+        </div>
+      ) : (
+        <div>
+          <input name="name" value={formData.name} onChange={handleChange} />
+          <input name="email" value={formData.email} onChange={handleChange} />
+          <button onClick={() => setEditing(false)}>Save</button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default UserDetails;
+
