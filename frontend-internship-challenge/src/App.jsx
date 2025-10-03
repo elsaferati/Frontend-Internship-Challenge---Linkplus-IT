@@ -1,14 +1,15 @@
 import React from 'react';
-import 
-{Roues, Route, Routes} from 'react-router-dom';
-import Home from './pages/Home';
-import UserDetails from './pages/UserDetails';
+import { Route, Routes } from 'react-router-dom';
+import Home from './pages/Home.jsx';
+import UserDetails from './pages/UserDetails.jsx';
 
 function App() {
-    return (
-        <Routes>
-            <Route path = "/" element = {<Home />}/>
-            <Route path='/user/:id' element = {<UserDetails />}/>
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/user/:id" element={<UserDetails />} />
+    </Routes>
+  );
 }
+
+export default App;
